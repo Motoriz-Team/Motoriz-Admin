@@ -7,11 +7,22 @@ import ProductTable from '../../components/products/ProductTable';
 import SearchBar from '../../components/common/SearchBar';
 
 type Category = { id: number; name: string; };
-type Product = { id: number; category: Category; name: string; price: number; image: string; stock: number; };
+type Product = { 
+  id: number; 
+  category: Category; 
+  name: string; 
+  brand?: string;
+  price: number; 
+  images: string[]; 
+  stock: number;
+  description?: string;
+};
 
 const initialCategories: Category[] = [
-    { id: 1, name: "Accu" }, { id: 2, name: "Ban" },
-    { id: 3, name: "Shockbreaker" }, { id: 4, name: "Kampas Rem" },
+    { id: 1, name: "Accu" }, 
+    { id: 2, name: "Ban" },
+    { id: 3, name: "Shockbreaker" }, 
+    { id: 4, name: "Kampas Rem" },
 ];
 
 const SukuCadangListPage = () => {
@@ -24,8 +35,26 @@ const SukuCadangListPage = () => {
 
     useEffect(() => {
         const initialProducts: Product[] = [
-            { id: 1, category: categories.find(c => c.id === 1)!, name: "GS Astra Premium N50", price: 770000, image: "sparepat.jpg", stock: 15 },
-            { id: 3, category: categories.find(c => c.id === 2)!, name: "Maxxis Victra", price: 195000, image: "maxxisvic.jpg", stock: 22 },
+            { 
+              id: 1, 
+              category: categories.find(c => c.id === 1)!, 
+              name: "GS Astra Premium N50", 
+              brand: "GS Astra",
+              price: 770000, 
+              images: ["sparepat.jpg"], 
+              stock: 15,
+              description: "Aki basah premium dengan daya tahan lama, cocok untuk motor 150cc ke atas"
+            },
+            { 
+              id: 3, 
+              category: categories.find(c => c.id === 2)!, 
+              name: "Maxxis Victra", 
+              brand: "Maxxis",
+              price: 195000, 
+              images: ["maxxisvic.jpg"], 
+              stock: 22,
+              description: "Ban tubeless dengan grip maksimal di segala cuaca"
+            },
         ];
         setProducts(initialProducts);
     }, []);
@@ -33,7 +62,8 @@ const SukuCadangListPage = () => {
     const filteredProducts = useMemo(() => {
         return products.filter(product =>
             product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            product.category.name.toLowerCase().includes(searchTerm.toLowerCase())
+            product.category.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (product.brand && product.brand.toLowerCase().includes(searchTerm.toLowerCase()))
         );
     }, [products, searchTerm]);
 
@@ -106,7 +136,7 @@ const SukuCadangListPage = () => {
                 <SearchBar
                     value={searchTerm}
                     onChange={setSearchTerm}
-                    placeholder="Cari berdasarkan nama produk atau kategori..."
+                    placeholder="Cari berdasarkan nama produk, kategori, atau merk..."
                 />
             </div>
 

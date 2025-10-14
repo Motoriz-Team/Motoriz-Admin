@@ -7,7 +7,16 @@ import ProductTable from '../../components/products/ProductTable';
 import SearchBar from '../../components/common/SearchBar';
 
 type Category = { id: number; name: string; };
-type Product = { id: number; category: Category; name: string; price: number; image: string; stock: number; };
+type Product = { 
+  id: number; 
+  category: Category; 
+  name: string; 
+  brand?: string;
+  price: number; 
+  images: string[]; 
+  stock: number;
+  description?: string;
+};
 
 const initialCategories: Category[] = [
     { id: 1, name: "Lampu" },
@@ -26,9 +35,36 @@ const AksesorisPage = () => {
 
     useEffect(() => {
         const initialProducts: Product[] = [
-            { id: 1, category: categories.find(c => c.id === 1)!, name: "Lampu LED Depan RGB", price: 275000, image: "lampu.jpg", stock: 25 },
-            { id: 2, category: categories.find(c => c.id === 2)!, name: "Kaca Spion Premium", price: 125000, image: "spion.jpg", stock: 18 },
-            { id: 3, category: categories.find(c => c.id === 3)!, name: "Footstep Alloy", price: 95000, image: "footstep.jpg", stock: 32 },
+            { 
+              id: 1, 
+              category: categories.find(c => c.id === 1)!, 
+              name: "Lampu LED Depan RGB", 
+              brand: "Osram",
+              price: 275000, 
+              images: ["lampu.jpg"], 
+              stock: 25,
+              description: "Lampu LED RGB dengan remote control, dapat diubah 16 warna. Waterproof IP67"
+            },
+            { 
+              id: 2, 
+              category: categories.find(c => c.id === 2)!, 
+              name: "Kaca Spion Premium", 
+              brand: "Rizoma",
+              price: 125000, 
+              images: ["spion.jpg"], 
+              stock: 18,
+              description: "Spion CNC aluminum dengan kaca anti glare, universal untuk semua motor"
+            },
+            { 
+              id: 3, 
+              category: categories.find(c => c.id === 3)!, 
+              name: "Footstep Alloy", 
+              brand: "Bikers",
+              price: 95000, 
+              images: ["footstep.jpg"], 
+              stock: 32,
+              description: "Footstep racing dari alloy ringan dan kuat, anti slip"
+            },
         ];
         setProducts(initialProducts);
     }, []);
@@ -36,7 +72,8 @@ const AksesorisPage = () => {
     const filteredProducts = useMemo(() => {
         return products.filter(product =>
             product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            product.category.name.toLowerCase().includes(searchTerm.toLowerCase())
+            product.category.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (product.brand && product.brand.toLowerCase().includes(searchTerm.toLowerCase()))
         );
     }, [products, searchTerm]);
 
@@ -109,7 +146,7 @@ const AksesorisPage = () => {
                 <SearchBar
                     value={searchTerm}
                     onChange={setSearchTerm}
-                    placeholder="Cari berdasarkan nama produk atau kategori..."
+                    placeholder="Cari berdasarkan nama produk, kategori, atau merk..."
                 />
             </div>
 

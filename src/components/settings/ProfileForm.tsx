@@ -111,7 +111,7 @@ const ProfileForm = () => {
         <div className="flex justify-end pt-4">
           <button
             type="submit"
-            className="bg-[--color-secondary] text-white font-bold py-2 px-6 rounded-lg hover:bg-opacity-90 transition-colors w-full md:w-auto"
+            className="bg-green-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-opacity-90 transition-colors w-full md:w-auto"
           >
             Simpan Perubahan
           </button>

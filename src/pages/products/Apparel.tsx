@@ -7,7 +7,16 @@ import ProductTable from '../../components/products/ProductTable';
 import SearchBar from '../../components/common/SearchBar';
 
 type Category = { id: number; name: string; };
-type Product = { id: number; category: Category; name: string; price: number; image: string; stock: number; };
+type Product = { 
+  id: number; 
+  category: Category; 
+  name: string; 
+  brand?: string;
+  price: number; 
+  images: string[]; 
+  stock: number;
+  description?: string;
+};
 
 const initialCategories: Category[] = [
     { id: 1, name: "Helm" },
@@ -26,9 +35,36 @@ const ApparelPage = () => {
 
     useEffect(() => {
         const initialProducts: Product[] = [
-            { id: 1, category: categories.find(c => c.id === 1)!, name: "Helm Safety Pro Black", price: 450000, image: "helm.jpg", stock: 20 },
-            { id: 2, category: categories.find(c => c.id === 2)!, name: "Jaket Riding Premium", price: 650000, image: "jaket.jpg", stock: 15 },
-            { id: 3, category: categories.find(c => c.id === 3)!, name: "Sarung Tangan Kulit", price: 185000, image: "gloves.jpg", stock: 30 },
+            { 
+              id: 1, 
+              category: categories.find(c => c.id === 1)!, 
+              name: "Helm Safety Pro Black", 
+              brand: "KYT",
+              price: 450000, 
+              images: ["helm.jpg"], 
+              stock: 20,
+              description: "Helm full face dengan standar SNI dan DOT, dilengkapi double visor"
+            },
+            { 
+              id: 2, 
+              category: categories.find(c => c.id === 2)!, 
+              name: "Jaket Riding Premium", 
+              brand: "Alpinestars",
+              price: 650000, 
+              images: ["jaket.jpg"], 
+              stock: 15,
+              description: "Jaket riding dengan protector di siku, bahu, dan punggung. Waterproof dan breathable"
+            },
+            { 
+              id: 3, 
+              category: categories.find(c => c.id === 3)!, 
+              name: "Sarung Tangan Kulit", 
+              brand: "Taichi",
+              price: 185000, 
+              images: ["gloves.jpg"], 
+              stock: 30,
+              description: "Sarung tangan kulit asli dengan protector knuckle, nyaman dan tahan lama"
+            },
         ];
         setProducts(initialProducts);
     }, []);
@@ -36,7 +72,8 @@ const ApparelPage = () => {
     const filteredProducts = useMemo(() => {
         return products.filter(product =>
             product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            product.category.name.toLowerCase().includes(searchTerm.toLowerCase())
+            product.category.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (product.brand && product.brand.toLowerCase().includes(searchTerm.toLowerCase()))
         );
     }, [products, searchTerm]);
 
@@ -109,7 +146,7 @@ const ApparelPage = () => {
                 <SearchBar
                     value={searchTerm}
                     onChange={setSearchTerm}
-                    placeholder="Cari berdasarkan nama produk atau kategori..."
+                    placeholder="Cari berdasarkan nama produk, kategori, atau merk..."
                 />
             </div>
 

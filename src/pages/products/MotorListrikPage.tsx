@@ -7,7 +7,16 @@ import ProductTable from '../../components/products/ProductTable';
 import SearchBar from '../../components/common/SearchBar';
 
 type Category = { id: number; name: string; };
-type Product = { id: number; category: Category; name: string; price: number; image: string; stock: number; };
+type Product = { 
+  id: number; 
+  category: Category; 
+  name: string; 
+  brand?: string;
+  price: number; 
+  images: string[]; 
+  stock: number;
+  description?: string;
+};
 
 const initialCategories: Category[] = [
     { id: 1, name: "Mid Drive Motor" },
@@ -26,9 +35,36 @@ const MotorListrikPage = () => {
 
     useEffect(() => {
         const initialProducts: Product[] = [
-            { id: 1, category: categories.find(c => c.id === 1)!, name: "Mid Drive 2000W Premium", price: 5500000, image: "motor.jpg", stock: 8 },
-            { id: 2, category: categories.find(c => c.id === 2)!, name: "Hub Motor 1500W", price: 4200000, image: "hub.jpg", stock: 5 },
-            { id: 3, category: categories.find(c => c.id === 3)!, name: "Baterai LiFePO4 48V 20Ah", price: 8500000, image: "battery.jpg", stock: 12 },
+            { 
+              id: 1, 
+              category: categories.find(c => c.id === 1)!, 
+              name: "Mid Drive 2000W Premium", 
+              brand: "Bafang",
+              price: 5500000, 
+              images: ["motor.jpg"], 
+              stock: 8,
+              description: "Mid Drive motor dengan power 2000W, cocok untuk motor listrik performa tinggi"
+            },
+            { 
+              id: 2, 
+              category: categories.find(c => c.id === 2)!, 
+              name: "Hub Motor 1500W", 
+              brand: "QS Motor",
+              price: 4200000, 
+              images: ["hub.jpg"], 
+              stock: 5,
+              description: "Hub Motor dengan efisiensi tinggi, mudah perawatan"
+            },
+            { 
+              id: 3, 
+              category: categories.find(c => c.id === 3)!, 
+              name: "Baterai LiFePO4 48V 20Ah", 
+              brand: "Winston",
+              price: 8500000, 
+              images: ["battery.jpg"], 
+              stock: 12,
+              description: "Baterai dengan masa pakai panjang dan aman"
+            },
         ];
         setProducts(initialProducts);
     }, []);
@@ -36,7 +72,8 @@ const MotorListrikPage = () => {
     const filteredProducts = useMemo(() => {
         return products.filter(product =>
             product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            product.category.name.toLowerCase().includes(searchTerm.toLowerCase())
+            product.category.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (product.brand && product.brand.toLowerCase().includes(searchTerm.toLowerCase()))
         );
     }, [products, searchTerm]);
 
@@ -109,7 +146,7 @@ const MotorListrikPage = () => {
                 <SearchBar
                     value={searchTerm}
                     onChange={setSearchTerm}
-                    placeholder="Cari berdasarkan nama produk atau kategori..."
+                    placeholder="Cari berdasarkan nama produk, kategori, atau merk..."
                 />
             </div>
 
