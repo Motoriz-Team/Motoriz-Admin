@@ -1,5 +1,3 @@
-// src/App.tsx (Versi Lengkap yang Benar)
-
 import { Routes, Route } from 'react-router-dom';
 
 // Layout & Komponen
@@ -11,36 +9,78 @@ import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 
-// Halaman Admin
+// Halaman Admin - Dashboard
 import Dashboard from './pages/Dashboard';
-// ... import halaman admin lainnya ...
 
-import './index.css';
+// Halaman Admin - Produk
 import SukuCadangPage from './pages/products/SukuCadangListPage';
-import ServicePage from './pages/ServicePage';
-import TrainingPage from './pages/TrainingPage';
-import NewsPage from './pages/NewsPage';
+import MotorListrikPage from './pages/products/MotorListrikPage';
+import ApparelPage from './pages/products/Apparel';
+import AksesorisPage from './pages/products/Aksesoris';
+import KategoriProdukPage from './pages/products/KategoriProductPage';
+import DataProdukPage from './pages/products/DataProdukPage';
+
+// Halaman Admin - Layanan
+import ServicePage from './pages/service/ServicePage';
+import DataServicePage from './pages/service/DataServicePage';
+import TambahServicePage from './pages/service/TambahServicePage';
+
+// Halaman Admin - Pelatihan
+import TrainingPage from './pages/training/TrainingPage';
+import DataTrainingPage from './pages/training/DataTrainingPage';
+import TambahTrainingPage from './pages/training/TambahTrainingPage';
+
+// Halaman Admin - Berita
+import NewsPage from './pages/news/NewsPage';
+import DataNewsPage from './pages/news/DataNewsPage';
+import TambahNewsPage from './pages/news/TambahNewsPage';
+
+// Halaman Admin - Lainnya
 import ReservationPage from './pages/ReservationPage';
 import SettingsPage from './pages/SettingsPage';
+
+import './index.css';
 
 function App() {
   return (
     <Routes>
       {/* Rute Publik (Bisa diakses siapa saja) */}
-      <Route path="/" element={<HomePage />} /> {/* <-- Biarkan rute utama mengarah ke HomePage */}
+      <Route path="/" element={<HomePage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
       {/* Rute Admin yang Dilindungi */}
       <Route element={<ProtectedRoute />}>
         <Route element={<AdminLayout />}>
-          <Route path="/dashboard" element={<Dashboard />} /> {/* <-- INI PERUBAHANNYA */}
+          {/* Dashboard */}
+          <Route path="/dashboard" element={<Dashboard />} />
+
+          {/* Produk Routes */}
+          <Route path="/products/kategori" element={<KategoriProdukPage />} />
+          <Route path="/products/data" element={<DataProdukPage />} />
+          <Route path="/products/motor-listrik" element={<MotorListrikPage />} />
           <Route path="/products/suku-cadang" element={<SukuCadangPage />} />
+          <Route path="/products/apparel" element={<ApparelPage />} />
+          <Route path="/products/aksesoris" element={<AksesorisPage />} />
+
+          {/* Layanan Routes */}
           <Route path="/service" element={<ServicePage />} />
+          <Route path="/service/data" element={<DataServicePage />} />
+          <Route path="/service/tambah" element={<TambahServicePage />} />
+
+          {/* Pelatihan Routes */}
           <Route path="/training" element={<TrainingPage />} />
+          <Route path="/training/data" element={<DataTrainingPage />} />
+          <Route path="/training/tambah" element={<TambahTrainingPage />} />
+
+          {/* Berita Routes */}
           <Route path="/news" element={<NewsPage />} />
+          <Route path="/news/data" element={<DataNewsPage />} />
+          <Route path="/news/tambah" element={<TambahNewsPage />} />
+
+          {/* Lainnya */}
           <Route path="/reservasi" element={<ReservationPage />} />
-          <Route path="settings" element={<SettingsPage />} />
+          <Route path="/settings" element={<SettingsPage />} />
         </Route>
       </Route>
     </Routes>

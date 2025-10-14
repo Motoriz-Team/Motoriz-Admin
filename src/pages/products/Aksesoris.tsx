@@ -9,13 +9,15 @@ import ProductTable from '../../components/products/ProductTable';
 type Category = { id: number; name: string; };
 type Product = { id: number; category: Category; name: string; price: number; image: string; stock: number; };
 
-// Data Contoh
+// Data Contoh Kategori Aksesoris
 const initialCategories: Category[] = [
-    { id: 1, name: "Accu" }, { id: 2, name: "Ban" },
-    { id: 3, name: "Shockbreaker" }, { id: 4, name: "Kampas Rem" },
+    { id: 1, name: "Lampu" },
+    { id: 2, name: "Kaca Spion" },
+    { id: 3, name: "Footstep" },
+    { id: 4, name: "Tas Motor" },
 ];
 
-const SukuCadangPage = () => {
+const AksesorisPage = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const [categories, setCategories] = useState<Category[]>(initialCategories);
     const [isProductModalOpen, setIsProductModalOpen] = useState(false);
@@ -24,8 +26,9 @@ const SukuCadangPage = () => {
 
     useEffect(() => {
         const initialProducts: Product[] = [
-            { id: 1, category: categories.find(c => c.id === 1)!, name: "GS Astra Premium N50", price: 770000, image: "sparepat.jpg", stock: 15 },
-            { id: 3, category: categories.find(c => c.id === 2)!, name: "Maxxis Victra", price: 195000, image: "maxxisvic.jpg", stock: 22 },
+            { id: 1, category: categories.find(c => c.id === 1)!, name: "Lampu LED Depan RGB", price: 275000, image: "lampu.jpg", stock: 25 },
+            { id: 2, category: categories.find(c => c.id === 2)!, name: "Kaca Spion Premium", price: 125000, image: "spion.jpg", stock: 18 },
+            { id: 3, category: categories.find(c => c.id === 3)!, name: "Footstep Alloy", price: 95000, image: "footstep.jpg", stock: 32 },
         ];
         setProducts(initialProducts);
     }, []);
@@ -81,8 +84,8 @@ const SukuCadangPage = () => {
         <div className="bg-white p-8 rounded-lg shadow-md">
             <div className="flex justify-between items-center mb-6">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-800">Kategori Suku Cadang</h1>
-                    <p className="text-gray-500 mt-1">Manajemen Produk Suku Cadang</p>
+                    <h1 className="text-3xl font-bold text-gray-800">Kategori Aksesoris</h1>
+                    <p className="text-gray-500 mt-1">Manajemen Produk Aksesoris</p>
                 </div>
                 <div className="flex gap-2">
                     <button onClick={() => setIsCategoryModalOpen(true)} className="bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg flex items-center gap-2 hover:bg-gray-300">
@@ -121,4 +124,4 @@ const SukuCadangPage = () => {
     );
 };
 
-export default SukuCadangPage;
+export default AksesorisPage;

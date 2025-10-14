@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { FaAngleDown, FaAngleRight } from 'react-icons/fa';
-import { LogOut, LayoutDashboard, ShoppingBag, Settings, Wrench, GraduationCap, Newspaper, CalendarCheck } from 'lucide-react'; // Import ikon baru
+import { LogOut, LayoutDashboard, ShoppingBag, Settings, Wrench, GraduationCap, Newspaper, CalendarCheck } from 'lucide-react';
 
 const Sidebar = () => {
   const [isProductMenuOpen, setIsProductMenuOpen] = useState(true);
@@ -34,8 +34,8 @@ const Sidebar = () => {
             </Link>
           </li>
           
-          {/* MENU PRODUK BARU */}
-         <li className="mb-2">
+          {/* MENU PRODUK DENGAN SUBMENU */}
+          <li className="mb-2">
             <button 
               onClick={toggleProductMenu} 
               className={`w-full flex justify-between items-center py-2 px-4 rounded-md text-left ${isProductRouteActive ? 'bg-gray-700' : 'hover:bg-gray-700'}`}
@@ -45,7 +45,6 @@ const Sidebar = () => {
             </button>
             {isProductMenuOpen && (
               <ul className="pl-8 mt-2 space-y-2">
-                {/* KEMBALIKAN LINK SUKU CADANG */}
                 <li>
                   <Link 
                     to="/products/suku-cadang" 
@@ -54,21 +53,62 @@ const Sidebar = () => {
                     Suku Cadang
                   </Link>
                 </li>
-                {/* Anda bisa menambahkan link lain di sini jika perlu */}
+                <li>
+                  <Link 
+                    to="/products/motor-listrik" 
+                    className={`block py-1 px-2 text-sm rounded-md ${location.pathname === '/products/motor-listrik' ? 'bg-gray-600' : 'hover:bg-gray-700'}`}
+                  >
+                    Motor Listrik
+                  </Link>
+                </li>
+                <li>
+                  <Link 
+                    to="/products/apparel" 
+                    className={`block py-1 px-2 text-sm rounded-md ${location.pathname === '/products/apparel' ? 'bg-gray-600' : 'hover:bg-gray-700'}`}
+                  >
+                    Apparel
+                  </Link>
+                </li>
+                <li>
+                  <Link 
+                    to="/products/aksesoris" 
+                    className={`block py-1 px-2 text-sm rounded-md ${location.pathname === '/products/aksesoris' ? 'bg-gray-600' : 'hover:bg-gray-700'}`}
+                  >
+                    Aksesoris Motor
+                  </Link>
+                </li>
               </ul>
             )}
           </li>
 
-          <li className="mb-2"><Link to="/service" className={`flex items-center gap-3 py-2 px-4 rounded-md ${location.pathname === '/service' ? 'bg-gray-700' : 'hover:bg-gray-700'}`}><Wrench size={18} /> Service</Link>  </li>
-          <li className="mb-2"><Link to="/training" className={`flex items-center gap-3 py-2 px-4 rounded-md ${location.pathname === '/training' ? 'bg-gray-700' : 'hover:bg-gray-700'}`}><GraduationCap size={18} /> Training</Link></li>
-          <li className="mb-2"><Link to="/news" className={`flex items-center gap-3 py-2 px-4 rounded-md ${location.pathname === '/news' ? 'bg-gray-700' : 'hover:bg-gray-700'}`}><Newspaper size={18} /> News</Link></li>
-          <li className="mb-2"><Link to="/reservasi" className={`flex items-center gap-3 py-2 px-4 rounded-md ${location.pathname === '/reservasi' ? 'bg-gray-700' : 'hover:bg-gray-700'}`}><CalendarCheck size={18} /> Reservasi</Link></li>
+          <li className="mb-2">
+            <Link to="/service" className={`flex items-center gap-3 py-2 px-4 rounded-md ${location.pathname === '/service' ? 'bg-gray-700' : 'hover:bg-gray-700'}`}>
+              <Wrench size={18} /> Service
+            </Link>
+          </li>
+          <li className="mb-2">
+            <Link to="/training" className={`flex items-center gap-3 py-2 px-4 rounded-md ${location.pathname === '/training' ? 'bg-gray-700' : 'hover:bg-gray-700'}`}>
+              <GraduationCap size={18} /> Training
+            </Link>
+          </li>
+          <li className="mb-2">
+            <Link to="/news" className={`flex items-center gap-3 py-2 px-4 rounded-md ${location.pathname === '/news' ? 'bg-gray-700' : 'hover:bg-gray-700'}`}>
+              <Newspaper size={18} /> News
+            </Link>
+          </li>
+          <li className="mb-2">
+            <Link to="/reservasi" className={`flex items-center gap-3 py-2 px-4 rounded-md ${location.pathname === '/reservasi' ? 'bg-gray-700' : 'hover:bg-gray-700'}`}>
+              <CalendarCheck size={18} /> Reservasi
+            </Link>
+          </li>
         </ul>
       </nav>
       
       {/* PENGATURAN & LOGOUT */}
       <div className="mt-auto space-y-2">
-        <Link to="/settings" className={`flex items-center gap-3 py-2 px-4 rounded-md ${location.pathname === '/settings' ? 'bg-gray-700' : 'hover:bg-gray-700'}`} > <Settings size={18} /> Pengaturan</Link>
+        <Link to="/settings" className={`flex items-center gap-3 py-2 px-4 rounded-md ${location.pathname === '/settings' ? 'bg-gray-700' : 'hover:bg-gray-700'}`}>
+          <Settings size={18} /> Pengaturan
+        </Link>
         <button onClick={handleLogout} className="w-full flex items-center gap-3 py-2 px-4 text-red-400 hover:bg-red-900/50 rounded-md">
           <LogOut size={18} /> Logout
         </button>

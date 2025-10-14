@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
-import Modal from '../components/common/Modal';
-import TrainingForm from '../components/training/TrainingForm';
+import { useNavigate } from 'react-router-dom';
+import Modal from '../../components/common/Modal';
+import TrainingForm from '../../components/training/TrainingForm';
 
 type Training = {
   id: number;
@@ -11,7 +12,6 @@ type Training = {
   isAvailable: boolean;
 };
 
-// Data contoh, nanti ini akan datang dari database
 const initialTrainings: Training[] = [
   { id: 1, name: "Perawatan Motor Mandiri", price: 2500000, description: "Kurikulum berbasis teknologi kendaraan listrik terbaru", isAvailable: true },
   { id: 2, name: "Tune Up Sepeda Motor Injeksi", price: 2000000, description: "Kurikulum berbasis teknologi kendaraan listrik terbaru", isAvailable: true },
@@ -19,19 +19,15 @@ const initialTrainings: Training[] = [
   { id: 4, name: "Sepeda Motor Konversi Bensin ke Listrik", price: 1800000, description: "Kurikulum berbasis teknologi kendaraan listrik terbaru", isAvailable: false },
 ];
 
-const TrainingPage = () => {
+const DataTrainingPage = () => {
   const [trainings, setTrainings] = useState<Training[]>(initialTrainings);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTraining, setEditingTraining] = useState<Training | null>(null);
+  const navigate = useNavigate();
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setEditingTraining(null);
-  };
-
-  const handleAddTraining = () => {
-    setEditingTraining(null);
-    setIsModalOpen(true);
   };
 
   const handleEditTraining = (training: Training) => {
@@ -59,10 +55,13 @@ const TrainingPage = () => {
     <div className="bg-white p-8 rounded-lg shadow-md">
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-3xl font-bold text-gray-800">Pelatihan</h1>
-          <p className="text-gray-500 mt-1">Manajemen Program Pelatihan</p>
+          <h1 className="text-3xl font-bold text-gray-800">Data Pelatihan</h1>
+          <p className="text-gray-500 mt-1">Kelola semua program pelatihan yang tersedia</p>
         </div>
-        <button onClick={handleAddTraining} className="bg-green-500 text-white font-semibold py-2 px-4 rounded-lg flex items-center gap-2 hover:bg-green-600">
+        <button
+          onClick={() => navigate('/training/tambah')}
+          className="bg-green-500 text-white font-semibold py-2 px-4 rounded-lg flex items-center gap-2 hover:bg-green-600"
+        >
           <FaPlus /> Tambah Pelatihan
         </button>
       </div>
@@ -92,8 +91,12 @@ const TrainingPage = () => {
                   </span>
                 </td>
                 <td className="py-4 px-6 text-sm flex gap-2">
-                  <button onClick={() => handleEditTraining(training)} className="text-blue-500 hover:text-blue-700"><FaEdit size={18} /></button>
-                  <button onClick={() => handleDeleteTraining(training.id)} className="text-red-500 hover:text-red-700"><FaTrash size={18} /></button>
+                  <button onClick={() => handleEditTraining(training)} className="text-blue-500 hover:text-blue-700 transition-colors">
+                    <FaEdit size={18} />
+                  </button>
+                  <button onClick={() => handleDeleteTraining(training.id)} className="text-red-500 hover:text-red-700 transition-colors">
+                    <FaTrash size={18} />
+                  </button>
                 </td>
               </tr>
             ))}
@@ -113,4 +116,4 @@ const TrainingPage = () => {
   );
 };
 
-export default TrainingPage;
+export default DataTrainingPage;    

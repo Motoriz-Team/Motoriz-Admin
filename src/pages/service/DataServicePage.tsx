@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
-import Modal from '../components/common/Modal';
-import ServiceForm from '../components/service/ServiceForm';
+import { useNavigate } from 'react-router-dom';
+import Modal from '../../components/common/Modal';
+import ServiceForm from '../../components/service/ServiceForm';
 
 type Service = {
   id: number;
@@ -12,7 +13,6 @@ type Service = {
   isAvailable: boolean;
 };
 
-// Data contoh, nanti ini akan datang dari database
 const initialServices: Service[] = [
   { id: 1, name: "Service Baterai - Paket Standar", subCategory: "Service Motor Listrik", price: 1200000, description: "Perawatan & penggantian baterai motor listrik, cek kesehatan sel", isAvailable: true },
   { id: 2, name: "Tune Up Mesin - Paket Lengkap", subCategory: "Service Motor Bensin", price: 3500000, description: "Mid Drive 4000W, top speed 95 km/jam, jarak 120", isAvailable: true },
@@ -20,25 +20,15 @@ const initialServices: Service[] = [
   { id: 4, name: "Service Kelistrikan - Paket Basic", subCategory: "Service Motor Listrik", price: 700000, description: "Mid drive 6500W, top speed 100 km/jam, jarak", isAvailable: true },
 ];
 
-const subCategoryColors: { [key: string]: string } = {
-  "Service Motor Listrik": "bg-blue-100 text-blue-800",
-  "Service Motor Bensin": "bg-red-100 text-red-800",
-  "Konversi Motor": "bg-yellow-100 text-yellow-800",
-};
-
-const ServicePage = () => {
+const DataServicePage = () => {
   const [services, setServices] = useState<Service[]>(initialServices);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingService, setEditingService] = useState<Service | null>(null);
+  const navigate = useNavigate();
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setEditingService(null);
-  };
-
-  const handleAddService = () => {
-    setEditingService(null);
-    setIsModalOpen(true);
   };
 
   const handleEditService = (service: Service) => {
@@ -62,15 +52,24 @@ const ServicePage = () => {
     handleCloseModal();
   };
 
+  const subCategoryColors: { [key: string]: string } = {
+    "Service Motor Listrik": "bg-blue-100 text-blue-800",
+    "Service Motor Bensin": "bg-red-100 text-red-800",
+    "Konversi Motor": "bg-yellow-100 text-yellow-800",
+  };
+
   return (
     <div className="bg-white p-8 rounded-lg shadow-md">
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-3xl font-bold text-gray-800">Service</h1>
-          <p className="text-gray-500 mt-1">Manajemen Service</p>
+          <h1 className="text-3xl font-bold text-gray-800">Data Layanan</h1>
+          <p className="text-gray-500 mt-1">Kelola semua data layanan yang tersedia</p>
         </div>
-        <button onClick={handleAddService} className="bg-green-500 text-white font-semibold py-2 px-4 rounded-lg flex items-center gap-2 hover:bg-green-600">
-          <FaPlus /> Tambah Service
+        <button
+          onClick={() => navigate('/service/tambah')}
+          className="bg-green-500 text-white font-semibold py-2 px-4 rounded-lg flex items-center gap-2 hover:bg-green-600"
+        >
+          <FaPlus /> Tambah Layanan
         </button>
       </div>
 
@@ -79,7 +78,7 @@ const ServicePage = () => {
           <thead className="bg-gray-50">
             <tr>
               <th className="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
-              <th className="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Service</th>
+              <th className="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Layanan</th>
               <th className="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sub Kategori</th>
               <th className="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Harga</th>
               <th className="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Deskripsi</th>
@@ -105,8 +104,12 @@ const ServicePage = () => {
                   </span>
                 </td>
                 <td className="py-4 px-6 text-sm flex gap-2">
-                  <button onClick={() => handleEditService(service)} className="text-blue-500 hover:text-blue-700"><FaEdit size={18} /></button>
-                  <button onClick={() => handleDeleteService(service.id)} className="text-red-500 hover:text-red-700"><FaTrash size={18} /></button>
+                  <button onClick={() => handleEditService(service)} className="text-blue-500 hover:text-blue-700 transition-colors">
+                    <FaEdit size={18} />
+                  </button>
+                  <button onClick={() => handleDeleteService(service.id)} className="text-red-500 hover:text-red-700 transition-colors">
+                    <FaTrash size={18} />
+                  </button>
                 </td>
               </tr>
             ))}
@@ -114,7 +117,7 @@ const ServicePage = () => {
         </table>
       </div>
 
-      <Modal isOpen={isModalOpen} onClose={handleCloseModal} title={editingService ? "Edit Service" : "Tambah Service Baru"}>
+      <Modal isOpen={isModalOpen} onClose={handleCloseModal} title={editingService ? "Edit Layanan" : "Tambah Layanan Baru"}>
         <ServiceForm
           key={editingService ? editingService.id : 'new-service'}
           onSave={handleSaveService}
@@ -126,4 +129,4 @@ const ServicePage = () => {
   );
 };
 
-export default ServicePage;
+export default DataServicePage;
