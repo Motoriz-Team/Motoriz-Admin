@@ -35,8 +35,12 @@ import NewsPage from './pages/news/NewsPage';
 import DataNewsPage from './pages/news/DataNewsPage';
 import TambahNewsPage from './pages/news/TambahNewsPage';
 
+// Halaman Admin - Reservasi
+import ReservationPage from './pages/reservasi/ReservationPage';
+import DataReservationPage from './pages/reservasi/DataReservationPage';
+import TambahReservationPage from './pages/reservasi/TambahReservationPage';
+
 // Halaman Admin - Lainnya
-import ReservationPage from './pages/ReservationPage';
 import SettingsPage from './pages/SettingsPage';
 
 import './index.css';
@@ -78,8 +82,12 @@ function App() {
           <Route path="/news/data" element={<DataNewsPage />} />
           <Route path="/news/tambah" element={<TambahNewsPage />} />
 
-          {/* Lainnya */}
+          {/* Reservasi Routes */}
           <Route path="/reservasi" element={<ReservationPage />} />
+          <Route path="/reservasi/data" element={<DataReservationPage />} />
+          <Route path="/reservasi/tambah" element={<TambahReservationPage />} />
+
+          {/* Lainnya */}
           <Route path="/settings" element={<SettingsPage />} />
         </Route>
       </Route>

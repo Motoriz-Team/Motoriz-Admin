@@ -1,14 +1,14 @@
-import { useState, useEffect } from 'react';
-import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
+import { useState, useEffect, useMemo } from 'react';
+import { FaPlus } from 'react-icons/fa';
 import Modal from '../../components/common/Modal';
 import ProductForm from '../../components/products/ProductForm';
 import CategoryModal from '../../components/products/CategoryModal';
+import ProductTable from '../../components/products/ProductTable';
+import SearchBar from '../../components/common/SearchBar';
 
-// Tipe Data
 type Category = { id: number; name: string; };
 type Product = { id: number; category: Category; name: string; price: number; image: string; stock: number; };
 
-// Data Contoh Kategori Motor Listrik
 const initialCategories: Category[] = [
     { id: 1, name: "Mid Drive Motor" },
     { id: 2, name: "Hub Motor" },
@@ -22,6 +22,7 @@ const MotorListrikPage = () => {
     const [isProductModalOpen, setIsProductModalOpen] = useState(false);
     const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
     const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+    const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
         const initialProducts: Product[] = [
@@ -31,6 +32,13 @@ const MotorListrikPage = () => {
         ];
         setProducts(initialProducts);
     }, []);
+
+    const filteredProducts = useMemo(() => {
+        return products.filter(product =>
+            product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            product.category.name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+    }, [products, searchTerm]);
 
     const handleCloseProductModal = () => {
         setIsProductModalOpen(false);
@@ -47,6 +55,10 @@ const MotorListrikPage = () => {
         setIsProductModalOpen(true);
     };
 
+    const handleDeleteProduct = (id: number) => {
+        setProducts(products.filter(p => p.id !== id));
+    };
+
     const handleAddCategory = (name: string) => {
         const newCategory: Category = { id: Date.now(), name };
         setCategories(prevCategories => [...prevCategories, newCategory]);
@@ -54,12 +66,6 @@ const MotorListrikPage = () => {
 
     const handleDeleteCategory = (id: number) => {
         setCategories(categories.filter(c => c.id !== id));
-    };
-
-    const handleDeleteProduct = (id: number) => {
-        if (window.confirm("Yakin ingin hapus produk ini?")) {
-            setProducts(products.filter(p => p.id !== id));
-        }
     };
 
     const handleSaveProduct = (productData: Omit<Product, 'id' | 'category'> & { categoryId: number }) => {
@@ -82,51 +88,36 @@ const MotorListrikPage = () => {
     };
 
     return (
-        <div className="bg-white p-8 rounded-lg shadow-md">
-            <div className="flex justify-between items-center mb-6">
+        <div className="bg-white p-4 md:p-8 rounded-lg shadow-md">
+            <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-6">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-800">Kategori Motor Listrik</h1>
-                    <p className="text-gray-500 mt-1">Manajemen Produk Motor Listrik</p>
+                    <h1 className="text-2xl md:text-3xl font-bold text-gray-800">Kategori Motor Listrik</h1>
+                    <p className="text-gray-500 text-sm md:text-base mt-1">Manajemen Produk Motor Listrik</p>
                 </div>
-                <div className="flex gap-2">
-                    <button onClick={() => setIsCategoryModalOpen(true)} className="bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg flex items-center gap-2 hover:bg-gray-300">
+                <div className="flex gap-2 flex-col sm:flex-row">
+                    <button onClick={() => setIsCategoryModalOpen(true)} className="bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg flex items-center gap-2 hover:bg-gray-300 transition-colors w-full sm:w-auto justify-center">
                         <FaPlus /> Tambah Kategori
                     </button>
-                    <button onClick={handleAddProductClick} className="bg-green-500 text-white font-semibold py-2 px-4 rounded-lg flex items-center gap-2 hover:bg-green-600">
+                    <button onClick={handleAddProductClick} className="bg-green-500 text-white font-semibold py-2 px-4 rounded-lg flex items-center gap-2 hover:bg-green-600 transition-colors w-full sm:w-auto justify-center">
                         <FaPlus /> Tambah Produk
                     </button>
                 </div>
             </div>
 
-            <div className="overflow-x-auto">
-                <table className="min-w-full bg-white">
-                    <thead className="bg-gray-50">
-                        <tr>
-                            <th className="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
-                            <th className="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Kategori</th>
-                            <th className="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Produk</th>
-                            <th className="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Harga</th>
-                            <th className="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stok</th>
-                            <th className="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-200">
-                        {products.map((product, index) => (
-                            <tr key={product.id} className="hover:bg-gray-50">
-                                <td className="py-4 px-6 text-sm text-gray-900">{index + 1}</td>
-                                <td className="py-4 px-6 text-sm text-gray-900">{product.category.name}</td>
-                                <td className="py-4 px-6 text-sm font-medium text-gray-900">{product.name}</td>
-                                <td className="py-4 px-6 text-sm text-gray-500">Rp {product.price.toLocaleString('id-ID')}</td>
-                                <td className="py-4 px-6 text-sm">{product.stock}</td>
-                                <td className="py-4 px-6 text-sm flex gap-2">
-                                    <button onClick={() => handleEditProductClick(product)} className="text-blue-500 hover:text-blue-700"><FaEdit size={18} /></button>
-                                    <button onClick={() => handleDeleteProduct(product.id)} className="text-red-500 hover:text-red-700"><FaTrash size={18} /></button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+            {/* Search Bar */}
+            <div className="mb-6">
+                <SearchBar
+                    value={searchTerm}
+                    onChange={setSearchTerm}
+                    placeholder="Cari berdasarkan nama produk atau kategori..."
+                />
             </div>
+
+            <ProductTable
+                products={filteredProducts}
+                onEdit={handleEditProductClick}
+                onDelete={handleDeleteProduct}
+            />
 
             <Modal isOpen={isProductModalOpen} onClose={handleCloseProductModal} title={editingProduct ? "Edit Produk" : "Tambah Produk Baru"}>
                 <ProductForm
