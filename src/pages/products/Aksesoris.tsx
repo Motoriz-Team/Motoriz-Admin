@@ -32,6 +32,7 @@ const AksesorisPage = () => {
     const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
     const [editingProduct, setEditingProduct] = useState<Product | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState<number | 'all'>('all');
 
     useEffect(() => {
         const initialProducts: Product[] = [
@@ -70,12 +71,16 @@ const AksesorisPage = () => {
     }, []);
 
     const filteredProducts = useMemo(() => {
-        return products.filter(product =>
-            product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            product.category.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            (product.brand && product.brand.toLowerCase().includes(searchTerm.toLowerCase()))
-        );
-    }, [products, searchTerm]);
+        return products.filter(product => {
+            const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                product.category.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                (product.brand && product.brand.toLowerCase().includes(searchTerm.toLowerCase()));
+            
+            const matchesCategory = selectedCategory === 'all' || product.category.id === selectedCategory;
+            
+            return matchesSearch && matchesCategory;
+        });
+    }, [products, searchTerm, selectedCategory]);
 
     const handleCloseProductModal = () => {
         setIsProductModalOpen(false);
@@ -148,6 +153,49 @@ const AksesorisPage = () => {
                     onChange={setSearchTerm}
                     placeholder="Cari berdasarkan nama produk, kategori, atau merk..."
                 />
+            </div>
+
+            {/* Filter Kategori */}
+            <div className="mb-6">
+                <div className="flex flex-wrap gap-2">
+                    <button
+                        onClick={() => setSelectedCategory('all')}
+                        className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
+                            selectedCategory === 'all'
+                                ? 'bg-blue-200 text-blue-800'
+                                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                        }`}
+                    >
+                        Semua ({products.length})
+                    </button>
+                    {categories.map(category => (
+                        <button
+                            key={category.id}
+                            onClick={() => setSelectedCategory(category.id)}
+                            className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
+                                selectedCategory === category.id
+                                    ? 'bg-blue-200 text-blue-800'
+                                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                            }`}
+                        >
+                            {category.name} ({products.filter(p => p.category.id === category.id).length})
+                        </button>
+                    ))}
+                </div>
+            </div>
+
+            {/* Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div className="bg-blue-50 border-l-4 border-[--color-secondary] p-4 rounded">
+                    <p className="text-gray-600 text-sm">Produk Ditampilkan</p>
+                    <p className="text-2xl font-bold text-[--color-secondary]">{filteredProducts.length}</p>
+                </div>
+                <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded">
+                    <p className="text-gray-600 text-sm">Total Nilai Stok</p>
+                    <p className="text-2xl font-bold text-green-600">
+                        Rp {filteredProducts.reduce((sum, p) => sum + (p.price * p.stock), 0).toLocaleString('id-ID')}
+                    </p>
+                </div>
             </div>
 
             <ProductTable
